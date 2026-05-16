@@ -30,6 +30,7 @@ dev = [
   "deptry>=0.25.1",
   "prek>=0.4.0",
   "pysentry-rs>=0.4.5",
+  "pytest>=9.0.3",
   "ruff>=0.15.13",
   "ty>=0.0.36",
 ]
@@ -91,3 +92,6 @@ known_first_party = ["vod_recovery"]
 paths = ["src"]
 min_confidence = 100
 sort_by_size = true
+
+[tool.bandit.assert_used]
+skips = ["*_test.py", "*test_*.py"]

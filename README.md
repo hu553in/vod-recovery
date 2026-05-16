@@ -65,6 +65,7 @@ Useful commands:
 ```bash
 make install-deps
 uv run vod-recovery
+make test
 make check
 ```
 

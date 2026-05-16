@@ -15,6 +15,10 @@ lint:
 check-types:
 	uv run ty check .
 
+.PHONY: test
+test:
+	uv run pytest
+
 .PHONY: check
 check:
 	uv run prek --all-files --hook-stage pre-commit

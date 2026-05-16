@@ -202,7 +202,7 @@ def get_default_directory():
     directory = Path(default_directory).expanduser()
     try:
         directory.mkdir(parents=True, exist_ok=True)
-    except OSError:
+    except (OSError, ValueError):
         directory = Path(get_system_download_directory())
         directory.mkdir(parents=True, exist_ok=True)
     return str(directory)
