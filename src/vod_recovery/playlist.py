@@ -41,6 +41,9 @@ BLOCKED_STATUS_CODES = {403, 404, 410}
 M3U8_SEARCH_START_OFFSET = -30
 M3U8_SEARCH_END_OFFSET = 60
 M3U8_SEARCH_CONNECTOR_LIMIT = 100
+M3U8_SEARCH_RETRIES = 2
+M3U8_SEARCH_TIMEOUT = httpx.Timeout(5, connect=2)
+M3U8_SEARCH_TOTAL_TIMEOUT_SECONDS = 60
 M3U8_URL_HASH_LENGTH = 20
 FFPROBE_TIMEOUT_SECONDS = 15
 DEFAULT_FPS = 30
@@ -200,9 +203,24 @@ def build_candidate_m3u8_url(domain, streamer_name, video_id, epoch_timestamp, q
     )
 
 
+def iter_m3u8_search_offsets(start_offset, end_offset):
+    if 0 not in range(start_offset, end_offset):
+        yield from range(start_offset, end_offset)
+        return
+    yield 0
+    max_distance = max(abs(start_offset), abs(end_offset - 1))
+    for distance in range(1, max_distance + 1):
+        before = -distance
+        after = distance
+        if start_offset <= before < end_offset:
+            yield before
+        if start_offset <= after < end_offset:
+            yield after
+
+
 def build_candidate_m3u8_urls(domains, qualities, streamer_name, video_id, start_timestamp):
     urls = []
-    for seconds in range(M3U8_SEARCH_START_OFFSET, M3U8_SEARCH_END_OFFSET):
+    for seconds in iter_m3u8_search_offsets(M3U8_SEARCH_START_OFFSET, M3U8_SEARCH_END_OFFSET):
         epoch_timestamp = utils.calculate_epoch_timestamp(start_timestamp, seconds)
         if epoch_timestamp is None:
             continue
@@ -216,6 +234,44 @@ def build_candidate_m3u8_urls(domains, qualities, streamer_name, video_id, start
                 for quality in qualities
             )
     return urls
+
+
+def create_m3u8_search_task(session, url):
+    return asyncio.create_task(
+        fetch_status(session, url, retries=M3U8_SEARCH_RETRIES, timeout=M3U8_SEARCH_TIMEOUT)
+    )
+
+
+def start_m3u8_search_tasks(session, candidate_urls):
+    pending_tasks = set()
+    next_url_index = 0
+    while next_url_index < min(M3U8_SEARCH_CONNECTOR_LIMIT, len(candidate_urls)):
+        pending_tasks.add(create_m3u8_search_task(session, candidate_urls[next_url_index]))
+        next_url_index += 1
+    return (pending_tasks, next_url_index)
+
+
+async def cancel_m3u8_search_tasks(pending_tasks):
+    for pending_task in pending_tasks:
+        pending_task.cancel()
+    await asyncio.gather(*pending_tasks, return_exceptions=True)
+
+
+async def wait_for_m3u8_search_tasks(pending_tasks, search_deadline):
+    remaining_seconds = search_deadline - asyncio.get_running_loop().time()
+    if remaining_seconds <= 0:
+        return (set(), pending_tasks, True)
+    done_tasks, pending_tasks = await asyncio.wait(
+        pending_tasks, timeout=remaining_seconds, return_when=asyncio.FIRST_COMPLETED
+    )
+    return (done_tasks, pending_tasks, not done_tasks)
+
+
+def print_m3u8_search_timeout(progress_printed):
+    if progress_printed:
+        print_blank()
+    print_warning(f"M3U8 search timed out after {M3U8_SEARCH_TOTAL_TIMEOUT_SECONDS} seconds.")
+    return False
 
 
 async def find_vod_playlist_url(streamer_name, video_id, start_timestamp):
@@ -232,28 +288,44 @@ async def find_vod_playlist_url(streamer_name, video_id, start_timestamp):
     progress_printed = False
     try:
         limits = httpx.Limits(max_connections=M3U8_SEARCH_CONNECTOR_LIMIT)
-        async with httpx.AsyncClient(limits=limits, timeout=HTTP_TIMEOUT) as session:
-            tasks = [fetch_status(session, url) for url in candidate_urls]
-            task_objects = [asyncio.create_task(task) for task in tasks]
-            for index, task in enumerate(asyncio.as_completed(task_objects), 1):
-                try:
-                    url = await task
-                    print_progress(f"Searching {index}/{len(candidate_urls)} URLs")
+        checked_count = 0
+        search_deadline = asyncio.get_running_loop().time() + M3U8_SEARCH_TOTAL_TIMEOUT_SECONDS
+        async with httpx.AsyncClient(limits=limits, timeout=M3U8_SEARCH_TIMEOUT) as session:
+            pending_tasks, next_url_index = start_m3u8_search_tasks(session, candidate_urls)
+            while pending_tasks:
+                done_tasks, pending_tasks, timed_out = await wait_for_m3u8_search_tasks(
+                    pending_tasks, search_deadline
+                )
+                if timed_out:
+                    progress_printed = print_m3u8_search_timeout(progress_printed)
+                    await cancel_m3u8_search_tasks(pending_tasks)
+                    break
+                for task in done_tasks:
+                    checked_count += 1
+                    try:
+                        url = await task
+                    except (httpx.HTTPError, TimeoutError, ConnectionResetError, OSError):
+                        url = None
+                    print_progress(f"Searching {checked_count}/{len(candidate_urls)} URLs")
                     progress_printed = True
                     if url:
                         successful_url = url
                         print_blank()
-                        if not progress_printed:
-                            print_blank()
                         print_success(f"Found M3U8 URL: {successful_url}", after=1)
-                        for task_obj in task_objects:
-                            task_obj.cancel()
+                        await cancel_m3u8_search_tasks(pending_tasks)
                         break
-                except (httpx.HTTPError, TimeoutError, ConnectionResetError, OSError):
-                    continue
+                    if next_url_index < len(candidate_urls):
+                        pending_tasks.add(
+                            create_m3u8_search_task(session, candidate_urls[next_url_index])
+                        )
+                        next_url_index += 1
+                if successful_url:
+                    break
     except Exception as e:
         print_error(f"M3U8 search failed: {e!s}", before=1)
         return None
+    if progress_printed and successful_url is None:
+        print_blank()
     return successful_url
 
 

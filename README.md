@@ -110,7 +110,8 @@ cannot play remote HLS/M3U8 streams reliably.
 ### VOD recovery
 
 VOD recovery searches known Twitch VOD playlist domains around the stream start timestamp. The app
-warns when a stream is older than 60 days because recovery is usually unlikely after that point.
+checks the exact timestamp first, then nearby seconds. It warns when a stream is older than 60 days
+because recovery is usually unlikely after that point. The M3U8 search stops after 60 seconds.
 
 ### Playlist processing
 
