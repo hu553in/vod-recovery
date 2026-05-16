@@ -42,7 +42,7 @@ def test_sanitize_filename_collapses_replacement_underscores():
 
 
 def test_parse_vod_filename_uses_last_underscore_as_video_id(_quiet_output):
-    assert utils.parse_vod_filename("/tmp/some_streamer_12345.m3u8") == ("some_streamer", "12345")
+    assert utils.parse_vod_filename("/tmp/some_streamer_12345.m3u8") == ("some_streamer", "12345")  # nosec B108
 
 
 @pytest.mark.parametrize(
