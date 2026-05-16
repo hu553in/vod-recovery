@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+.venv/
+.ruff_cache/
+.vscode/
+__pycache__/
+build/
+dist/
+*.egg-info/
+*.py[cod]

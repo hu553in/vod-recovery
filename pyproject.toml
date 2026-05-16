@@ -1,0 +1,93 @@
+[project]
+name = "vod-recovery"
+version = "0.1.0"
+description = "CLI for finding recoverable hidden Twitch VOD playlists and downloading them."
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [{ name = "Ruslan Khasanshin" }]
+maintainers = [{ name = "Ruslan Khasanshin" }]
+
+dependencies = [
+  "fake-useragent>=2.2.0",
+  "httpx>=0.28.1",
+  "m3u8>=6.0.0",
+  "msgspec>=0.21.1",
+  "pathvalidate>=3.3.1",
+  "platformdirs>=4.9.6",
+  "python-dateutil>=2.9.0.post0",
+  "python-ffmpeg>=2.0.12",
+  "questionary>=2.1.1",
+  "rich>=15.0.0",
+  "static-ffmpeg>=3.0",
+  "tenacity>=9.1.4",
+  "tomli-w>=1.2.0",
+  "typed-settings>=25.3.0",
+]
+
+[dependency-groups]
+dev = [
+  "bandit>=1.9.4",
+  "deptry>=0.25.1",
+  "prek>=0.4.0",
+  "pysentry-rs>=0.4.5",
+  "ruff>=0.15.13",
+  "ty>=0.0.36",
+]
+
+[project.scripts]
+vod-recovery = "vod_recovery.runtime:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vod_recovery"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "UP",
+  "B",
+  "SIM",
+  "ARG",
+  "PL",
+  "RUF",
+  "C4",
+  "FA",
+  "N",
+  "PERF",
+  "W",
+]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = true
+
+[tool.pysentry.defaults]
+fail_on = "low"
+
+[tool.pysentry.sources]
+enabled = ["pypa", "pypi", "osv"]
+
+[tool.deptry]
+known_first_party = ["vod_recovery"]
+
+[tool.vulture]
+paths = ["src"]
+min_confidence = 100
+sort_by_size = true
