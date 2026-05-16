@@ -32,7 +32,7 @@ dev = [
   "pysentry-rs>=0.4.5",
   "pytest>=9.0.3",
   "ruff>=0.15.13",
-  "ty>=0.0.36",
+  "ty>=0.0.37",
 ]
 
 [project.scripts]
