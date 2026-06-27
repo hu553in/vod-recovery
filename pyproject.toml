@@ -29,10 +29,10 @@ dev = [
   "bandit>=1.9.4",
   "deptry>=0.25.1",
   "prek>=0.4.5",
-  "pysentry-rs>=0.4.6",
+  "pysentry-rs>=0.4.7",
   "pytest>=9.1.1",
-  "ruff>=0.15.18",
-  "ty>=0.0.51",
+  "ruff>=0.15.20",
+  "ty>=0.0.55",
 ]
 
 [project.scripts]
