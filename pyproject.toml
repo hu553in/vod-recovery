@@ -1,7 +1,7 @@
 [project]
 name = "vod-recovery"
 version = "0.1.0"
-description = "CLI for finding recoverable hidden Twitch VOD playlists and downloading them."
+description = "Interactive CLI for finding recoverable hidden Twitch VOD playlists and downloading them with ffmpeg."
 readme = "README.md"
 requires-python = ">=3.13"
 authors = [{ name = "Ruslan Khasanshin" }]
