@@ -5,25 +5,10 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - '**'
   workflow_dispatch:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
     permissions:
       contents: read
-    steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v7
-      - run: make install-deps
-      - uses: actions/cache@v6
-        with:
-          path: ~/.cache/prek
-          key: prek|${{ runner.os }}|${{ hashFiles('.pre-commit-config.yaml') }}
-          restore-keys: |
-            prek|${{ runner.os }}|
-      - uses: j178/prek-action@v2
-        with:
-          extra-args: --all-files --hook-stage pre-commit
+    uses: hu553in/common-things/.github/workflows/check-python.yml@main

@@ -2,10 +2,9 @@
 name = "vod-recovery"
 version = "0.1.0"
 description = "Interactive CLI for finding recoverable hidden Twitch VOD playlists and downloading them with ffmpeg."
+authors = [{ name = "Ruslan Khasanshin" }]
 readme = "README.md"
 requires-python = ">=3.13"
-authors = [{ name = "Ruslan Khasanshin" }]
-maintainers = [{ name = "Ruslan Khasanshin" }]
 
 dependencies = [
   "fake-useragent>=2.2.0",
@@ -31,8 +30,10 @@ dev = [
   "prek>=0.4.6",
   "pysentry-rs>=0.4.7",
   "pytest>=9.1.1",
+  "pytest-cov>=7.1.0",
   "ruff>=0.15.20",
   "ty>=0.0.56",
+  "vulture>=2.16",
 ]
 
 [project.scripts]
@@ -45,19 +46,20 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/vod_recovery"]
 
+[project.urls]
+Repository = "https://github.com/hu553in/vod-recovery"
+
 [tool.uv]
-default-groups = ["dev"]
 link-mode = "copy"
-package = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+addopts = "--cov=vod_recovery --cov-report=term-missing --cov-fail-under=45"
 
 [tool.ruff]
 target-version = "py313"
 line-length = 100
-extend-exclude = [".venv"]
 
 [tool.ruff.lint]
 select = [
@@ -75,14 +77,14 @@ select = [
   "N",
   "PERF",
   "W",
+  "PGH004",
+  "T10",
 ]
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false
 
 [tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
 skip-magic-trailing-comma = true
 
 [tool.pysentry.defaults]

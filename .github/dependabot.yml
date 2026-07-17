@@ -5,13 +5,8 @@ updates:
     directory: '/'
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
     assignees:
       - hu553in
-    commit-message:
-      prefix: 'deps(github-actions):'
-    allow:
-      - dependency-type: all
     groups:
       patch-and-minor:
         update-types:
@@ -24,13 +19,8 @@ updates:
     directory: '/'
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
     assignees:
       - hu553in
-    commit-message:
-      prefix: 'deps(uv):'
-    allow:
-      - dependency-type: all
     groups:
       patch-and-minor:
         update-types:
