@@ -19,6 +19,7 @@ Interactive CLI for finding recoverable hidden Twitch VOD playlists and download
 
 - Python 3.13+
 - `uv`
+- Bun for repository tooling
 - Network access to Twitch and playlist hosts
 - Optional: `ffmpeg` and `ffprobe` in `PATH`
 - Optional: `ffplay`, `mpv`, VLC, or MPC-HC for playback
@@ -87,13 +88,21 @@ choose quality, and downloads the result.
 
 ```bash
 make install-deps
+uv run prek install
 make check
+make check-fix
 ```
 
 Focused checks:
 
 ```bash
 make lint
+make lint-fix
 make check-types
+make check-deps
+make check-vulns
+make check-unused
+make check-security
+make check-build
 make test
 ```
