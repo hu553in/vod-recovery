@@ -1,5 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "enabledManagers": ["pyenv"]
+  "extends": ["github>hu553in/common-things//presets/renovate/python"]
 }
