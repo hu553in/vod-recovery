@@ -93,7 +93,7 @@ def find_macos_playback_app():
                 text=True,
                 timeout=2,
             )
-        except (OSError, subprocess.SubprocessError):
+        except OSError, subprocess.SubprocessError:
             continue
 
         for line in result.stdout.splitlines():
