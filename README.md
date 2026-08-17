@@ -17,7 +17,7 @@ Interactive CLI for finding recoverable hidden Twitch VOD playlists and download
 
 ## Requirements
 
-- Python 3.13+
+- Python
 - `uv`
 - Bun for repository tooling
 - Network access to Twitch and playlist hosts

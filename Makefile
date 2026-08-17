@@ -56,12 +56,20 @@ check-build:
 test:
 	uv run pytest
 
+.PHONY: check-renovate
+check-renovate:
+	bunx --package renovate renovate-config-validator --strict --no-global renovate.json
+
+.PHONY: check-hooks
+check-hooks:
+	uv run prek validate-config prek.toml
+
 .PHONY: check-workflows
 check-workflows:
 	$(ACTIONLINT)
 
 .PHONY: check
-check: lint check-types check-deps check-vulns check-unused check-security check-build test check-workflows
+check: lint check-hooks check-types check-deps check-vulns check-unused check-security check-build check-renovate test check-workflows
 
 .PHONY: check-fix
 check-fix: lint-fix
