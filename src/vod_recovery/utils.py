@@ -28,7 +28,7 @@ def format_iso_datetime(iso_datetime: str):
         if dt.tzinfo is not None:
             dt = dt.astimezone(UTC).replace(tzinfo=None)
         return dt.strftime("%Y-%m-%d %H:%M:%S")
-    except (TypeError, ValueError, OverflowError):
+    except TypeError, ValueError, OverflowError:
         return None
 
 
@@ -65,7 +65,7 @@ def calculate_epoch_timestamp(timestamp, seconds):
             date_parser.parse(timestamp) + timedelta(seconds=seconds) - datetime(1970, 1, 1)
         ).total_seconds()
         return epoch_timestamp
-    except (TypeError, ValueError, OverflowError):
+    except TypeError, ValueError, OverflowError:
         return None
 
 
@@ -117,7 +117,7 @@ def get_short_filename(filename):
 def format_file_size(n):
     try:
         return format_decimal_filesize(int(n))
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return "0 bytes"
 
 
@@ -127,12 +127,12 @@ def seconds_to_time_str(seconds):
         minutes = int(seconds % SECONDS_PER_HOUR // SECONDS_PER_MINUTE)
         secs = int(seconds % SECONDS_PER_MINUTE)
         return f"{hours:02d}:{minutes:02d}:{secs:02d}"
-    except (TypeError, ValueError, OverflowError):
+    except TypeError, ValueError, OverflowError:
         return "00:00:00"
 
 
 def format_date(date_string):
     try:
         return date_parser.parse(date_string).strftime("%Y-%m-%d")
-    except (TypeError, ValueError, OverflowError):
+    except TypeError, ValueError, OverflowError:
         return None

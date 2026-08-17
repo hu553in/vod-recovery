@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Interactive CLI for finding recoverable hidden Twitch VOD playlists and downloading them with ffmpeg."
 authors = [{ name = "Ruslan Khasanshin" }]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 
 dependencies = [
   "fake-useragent>=2.2.0",
@@ -58,7 +58,7 @@ pythonpath = ["src"]
 addopts = "--cov=vod_recovery --cov-report=term-missing --cov-fail-under=45"
 
 [tool.ruff]
-target-version = "py313"
+target-version = "py314"
 line-length = 100
 
 [tool.ruff.lint]

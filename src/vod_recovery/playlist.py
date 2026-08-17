@@ -129,7 +129,7 @@ def write_m3u8_to_file(m3u8_link, destination_path, max_retries=5):
         if response.status_code in BLOCKED_STATUS_CODES:
             try:
                 vod_id = utils.parse_video_id_from_m3u8_link(m3u8_link)
-            except (IndexError, ValueError):
+            except IndexError, ValueError:
                 vod_id = "video"
             generated_path = Path(get_default_directory()) / f"vod_{vod_id}_generated.m3u8"
             if generated_path.exists():
@@ -155,13 +155,13 @@ def is_video_muted(m3u8_link):
         if response.status_code in BLOCKED_STATUS_CODES:
             try:
                 vod_id = utils.parse_video_id_from_m3u8_link(m3u8_link)
-            except (IndexError, ValueError):
+            except IndexError, ValueError:
                 return False
             generated_path = Path(get_default_directory()) / f"vod_{vod_id}_generated.m3u8"
             if generated_path.exists():
                 return bool("unmuted" in generated_path.read_text(encoding="utf-8"))
             return False
-    except (OSError, httpx.HTTPError):
+    except OSError, httpx.HTTPError:
         return False
     return False
 
@@ -188,7 +188,7 @@ async def fetch_status(session, url, retries=5, timeout=30):
                     elif url.endswith((".ts", ".mp4")) or response.content:
                         return url
                 return None
-    except (httpx.HTTPError, TimeoutError, ConnectionResetError, OSError):
+    except httpx.HTTPError, TimeoutError, ConnectionResetError, OSError:
         return None
     return None
 
@@ -304,7 +304,7 @@ async def find_vod_playlist_url(streamer_name, video_id, start_timestamp):
                     checked_count += 1
                     try:
                         url = await task
-                    except (httpx.HTTPError, TimeoutError, ConnectionResetError, OSError):
+                    except httpx.HTTPError, TimeoutError, ConnectionResetError, OSError:
                         url = None
                     print_progress(f"Searching {checked_count}/{len(candidate_urls)} URLs")
                     progress_printed = True
@@ -364,7 +364,7 @@ def parse_frame_rate(fps_str):
             numerator, denominator = fps_str.split("/")
             return round(float(numerator) / float(denominator))
         return round(float(fps_str))
-    except (ValueError, ZeroDivisionError):
+    except ValueError, ZeroDivisionError:
         return DEFAULT_FPS
 
 
@@ -482,7 +482,7 @@ def get_local_playlist_path(m3u8_link):
             utils.parse_streamer_from_m3u8_link(m3u8_link),
             utils.parse_video_id_from_m3u8_link(m3u8_link),
         )
-    except (IndexError, ValueError):
+    except IndexError, ValueError:
         return str(Path(get_default_directory()) / "video.m3u8")
 
 
@@ -550,7 +550,7 @@ def is_playlist_playable(m3u8_source):
 def get_vod_id_or_default(m3u8_link):
     try:
         return utils.parse_video_id_from_m3u8_link(m3u8_link)
-    except (IndexError, ValueError):
+    except IndexError, ValueError:
         return "video"
 
 
@@ -594,7 +594,7 @@ def remove_stale_local_playlist(m3u8_link, vod_id):
             utils.parse_streamer_from_m3u8_link(m3u8_link),
             utils.parse_video_id_from_m3u8_link(m3u8_link),
         )
-    except (IndexError, ValueError):
+    except IndexError, ValueError:
         file_path = str(Path(get_default_directory()) / f"vod_{vod_id}.m3u8")
     with contextlib.suppress(FileNotFoundError):
         Path(file_path).unlink()

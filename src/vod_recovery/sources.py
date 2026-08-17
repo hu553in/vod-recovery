@@ -112,10 +112,10 @@ def fetch_vodvod_streams(streamer_name):
                         "stream_id": metadata.StreamID,
                     }
                 )
-            except (KeyError, TypeError, ValueError):
+            except KeyError, TypeError, ValueError:
                 continue
         return streams if streams else None
-    except (msgspec.DecodeError, msgspec.ValidationError, ValueError, TypeError):
+    except msgspec.DecodeError, msgspec.ValidationError, ValueError, TypeError:
         return None
 
 
@@ -234,10 +234,10 @@ def fetch_twitch_streams(streamer_name, max_streams=100):
                         "stream_id": stream_id or node.id,
                     }
                 )
-            except (KeyError, TypeError, ValueError):
+            except KeyError, TypeError, ValueError:
                 continue
         return streams
-    except (msgspec.DecodeError, msgspec.ValidationError, ValueError, TypeError):
+    except msgspec.DecodeError, msgspec.ValidationError, ValueError, TypeError:
         return None
 
 
@@ -297,7 +297,7 @@ def find_recent_streams(streamer_name):
     def future_result(future):
         try:
             return future.result()
-        except (httpx.HTTPError, KeyError, TypeError, ValueError):
+        except httpx.HTTPError, KeyError, TypeError, ValueError:
             return None
 
     with ThreadPoolExecutor(max_workers=2) as executor:
@@ -325,7 +325,7 @@ def normalize_streams(streams):
                     "duration": row.get("duration"),
                 }
             )
-        except (KeyError, TypeError):
+        except KeyError, TypeError:
             continue
     return normalized
 

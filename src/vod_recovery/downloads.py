@@ -213,7 +213,7 @@ def handle_retry_command(command):
         print_text("Retrying command: " + " ".join(arguments))
         run_subprocess(arguments)
         return True
-    except (OSError, subprocess.SubprocessError):
+    except OSError, subprocess.SubprocessError:
         return False
 
 
@@ -226,7 +226,7 @@ def run_download_command(command, output_filename, m3u8_source, output_path):
     try:
         handle_progress_bar(command, output_filename, m3u8_source, output_path)
         return True
-    except (OSError, RuntimeError, subprocess.SubprocessError):
+    except OSError, RuntimeError, subprocess.SubprocessError:
         retry_success = handle_retry_command(command)
         return bool(retry_success and Path(output_path).exists())
 
@@ -332,7 +332,7 @@ def get_stream_date_from_m3u8(m3u8_file):
             adjusted_date = date - timedelta(seconds=total_seconds)
             adjusted_date_str = adjusted_date.strftime("%Y-%m-%d")
             return adjusted_date_str
-    except (OSError, ValueError):
+    except OSError, ValueError:
         return None
 
 
