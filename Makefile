@@ -44,7 +44,7 @@ check-unused:
 
 .PHONY: check-security
 check-security:
-	git ls-files -z -- '*.py' | xargs -0 uv run bandit -c pyproject.toml
+	git ls-files --cached --others --exclude-standard -z -- '*.py' | xargs -0 uv run bandit -c pyproject.toml
 
 .PHONY: check-build
 check-build:
