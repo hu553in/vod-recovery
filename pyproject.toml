@@ -20,7 +20,7 @@ dependencies = [
   "static-ffmpeg>=3.0",
   "tenacity>=9.1.4",
   "tomli-w>=1.2.0",
-  "typed-settings>=25.3.0",
+  "typed-settings>=26.0.0",
 ]
 
 [dependency-groups]
