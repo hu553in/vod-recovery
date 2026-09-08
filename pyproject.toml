@@ -97,7 +97,7 @@ enabled = ["pypa", "pypi", "osv"]
 known_first_party = ["vod_recovery"]
 
 [tool.vulture]
-paths = ["src"]
+paths = ["src", "tests"]
 min_confidence = 100
 sort_by_size = true
 
