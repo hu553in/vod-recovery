@@ -23,6 +23,19 @@ dependencies = [
   "typed-settings>=26.0.0",
 ]
 
+[project.scripts]
+vod-recovery = "vod_recovery.runtime:main"
+
+[project.urls]
+Repository = "https://github.com/hu553in/vod-recovery"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vod_recovery"]
+
 [dependency-groups]
 dev = [
   "bandit>=1.9.4",
@@ -32,22 +45,9 @@ dev = [
   "pytest>=9.1.1",
   "pytest-cov>=7.1.0",
   "ruff>=0.16.10",
-  "ty>=0.0.84",
+  "ty>=0.0.85",
   "vulture>=2.16",
 ]
-
-[project.scripts]
-vod-recovery = "vod_recovery.runtime:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/vod_recovery"]
-
-[project.urls]
-Repository = "https://github.com/hu553in/vod-recovery"
 
 [tool.uv]
 link-mode = "copy"

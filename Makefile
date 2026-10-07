@@ -1,8 +1,6 @@
 .DEFAULT_GOAL := check
 
-SHELL := /bin/bash
-.ONESHELL:
-.SHELLFLAGS := -euo pipefail -c
+SHELL := /bin/bash -euo pipefail
 
 PRETTIER := bunx prettier -u
 ACTIONLINT := bunx github-actionlint
