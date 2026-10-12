@@ -12,13 +12,13 @@ dependencies = [
   "m3u8>=6.0.0",
   "msgspec>=0.22.0",
   "pathvalidate>=3.3.1",
-  "platformdirs>=4.12.3",
+  "platformdirs>=4.13.0",
   "python-dateutil>=2.9.0.post0",
   "python-ffmpeg>=2.0.12",
   "questionary>=2.1.1",
   "rich>=15.0.0",
   "static-ffmpeg>=3.0",
-  "tenacity>=9.1.4",
+  "tenacity>=9.2.1",
   "tomli-w>=1.2.0",
   "typed-settings>=26.0.0",
 ]
@@ -44,8 +44,8 @@ dev = [
   "pysentry-rs>=0.5.0",
   "pytest>=9.1.1",
   "pytest-cov>=7.1.0",
-  "ruff>=0.16.10",
-  "ty>=0.0.85",
+  "ruff>=0.17.0",
+  "ty>=0.0.86",
   "vulture>=2.16",
 ]
 
