@@ -19,7 +19,7 @@ Interactive CLI for finding recoverable hidden Twitch VOD playlists and download
 
 - Python
 - `uv`
-- Bun for repository tooling
+- Make and Bun for repository tooling
 - Network access to Twitch and playlist hosts
 - Optional: `ffmpeg` and `ffprobe` in `PATH`
 - Optional: `ffplay`, `mpv`, VLC, or MPC-HC for playback
@@ -55,11 +55,13 @@ defaults on first run.
 
 Supported output containers: `.mp4`, `.mkv`, `.mov`, `.avi`, `.ts`.
 
-When `playback_command` is blank, players are tried in this order:
+When `playback_command` is blank or unusable, executables on `PATH` are tried in this order:
 
 ```text
 ffplay -> mpv -> vlc -> mpc-hc64 -> mpc-hc
 ```
+
+If none is found, installed player apps are searched on macOS and Windows.
 
 ## Usage
 
@@ -67,28 +69,26 @@ ffplay -> mpv -> vlc -> mpc-hc64 -> mpc-hc
 vod-recovery
 ```
 
-From a checkout:
+Run from a checkout:
 
 ```bash
-uv run vod-recovery
+uv run --locked vod-recovery
 ```
-
-The app asks for a streamer, lists recent streams, searches for a recoverable playlist, lets you
-choose quality, and downloads the result.
 
 ## Runtime behavior
 
 - Searches the exact stream timestamp first, then nearby seconds
 - Warns when a stream is older than 60 days
 - Stops M3U8 search after 60 seconds
-- Writes generated playlists and downloads only under the configured output directory
+- Writes generated playlists and downloads to `default_directory`, falling back to the system
+  Downloads directory if it cannot be created
 - Uses explicit playback commands because many default media apps cannot play remote HLS reliably
 
 ## Development
 
 ```bash
 make install-deps
-uv run prek install
+uv run --locked prek install
 make check
 make check-fix
 ```
@@ -98,11 +98,14 @@ Focused checks:
 ```bash
 make lint
 make lint-fix
+make check-hooks
 make check-types
 make check-deps
 make check-vulns
 make check-unused
 make check-security
 make check-build
+make check-renovate
 make test
+make check-workflows
 ```

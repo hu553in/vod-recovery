@@ -14,35 +14,39 @@ install-deps:
 lint:
 	$(PRETTIER) -c .
 	$(TAPLO) fmt --check
-	uv run ruff check
-	uv run ruff format --check
+	uv run --locked ruff check
+	uv run --locked ruff format --check
 
 .PHONY: lint-fix
 lint-fix:
 	$(PRETTIER) -w .
 	$(TAPLO) fmt
-	uv run ruff check --fix
-	uv run ruff format
+	uv run --locked ruff check --fix
+	uv run --locked ruff format
+
+.PHONY: check-hooks
+check-hooks:
+	uv run --locked prek validate-config prek.toml
 
 .PHONY: check-types
 check-types:
-	uv run ty check .
+	uv run --locked ty check .
 
 .PHONY: check-deps
 check-deps:
-	uv run deptry .
+	uv run --locked deptry .
 
 .PHONY: check-vulns
 check-vulns:
-	uv run pysentry-rs .
+	uv run --locked pysentry-rs .
 
 .PHONY: check-unused
 check-unused:
-	uv run vulture
+	uv run --locked vulture
 
 .PHONY: check-security
 check-security:
-	git ls-files --cached --others --exclude-standard -z -- '*.py' | xargs -0 uv run bandit -c pyproject.toml
+	git ls-files --cached --others --exclude-standard -z -- '*.py' | xargs -0 uv run --locked bandit -c pyproject.toml
 
 .PHONY: check-build
 check-build:
@@ -50,17 +54,13 @@ check-build:
 	trap 'rm -rf "$$output_dir"' EXIT; \
 	uv build --out-dir "$$output_dir"
 
-.PHONY: test
-test:
-	uv run pytest
-
 .PHONY: check-renovate
 check-renovate:
 	bunx --package renovate renovate-config-validator --strict --no-global renovate.json
 
-.PHONY: check-hooks
-check-hooks:
-	uv run prek validate-config prek.toml
+.PHONY: test
+test:
+	uv run --locked pytest
 
 .PHONY: check-workflows
 check-workflows:
