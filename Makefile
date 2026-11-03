@@ -2,7 +2,6 @@
 
 SHELL := /bin/bash -euo pipefail
 
-PRETTIER := bunx prettier -u
 ACTIONLINT := bunx github-actionlint
 TAPLO := bunx @taplo/cli
 
@@ -12,14 +11,14 @@ install-deps:
 
 .PHONY: lint
 lint:
-	$(PRETTIER) -c .
+	bun fmt --check
 	$(TAPLO) fmt --check
 	uv run --locked ruff check
 	uv run --locked ruff format --check
 
 .PHONY: lint-fix
 lint-fix:
-	$(PRETTIER) -w .
+	bun fmt
 	$(TAPLO) fmt
 	uv run --locked ruff check --fix
 	uv run --locked ruff format
