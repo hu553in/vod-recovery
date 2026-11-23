@@ -105,7 +105,6 @@ make check-vulns
 make check-unused
 make check-security
 make check-build
-make check-renovate
 make test
 make check-workflows
 ```

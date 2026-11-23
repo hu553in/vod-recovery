@@ -12,7 +12,7 @@ dependencies = [
   "m3u8>=6.0.0",
   "msgspec>=0.22.0",
   "pathvalidate>=3.3.1",
-  "platformdirs>=4.14.7",
+  "platformdirs>=4.14.8",
   "python-dateutil>=4.0.0",
   "python-ffmpeg>=2.0.12",
   "questionary>=2.1.1",
@@ -51,7 +51,6 @@ dev = [
 
 [tool.uv]
 link-mode = "copy"
-# Matches the Renovate minimumReleaseAge, so lockfile maintenance waits too.
 exclude-newer = "3 days"
 
 [tool.pytest.ini_options]
