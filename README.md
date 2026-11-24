@@ -17,7 +17,7 @@ Interactive CLI for finding recoverable hidden Twitch VOD playlists and download
 
 ## Requirements
 
-- Python
+- Python 3.15 or newer
 - `uv`
 - Make and Bun for repository tooling
 - Network access to Twitch and playlist hosts
@@ -72,7 +72,7 @@ vod-recovery
 Run from a checkout:
 
 ```bash
-uv run --locked vod-recovery
+uv run --locked --no-dev vod-recovery
 ```
 
 ## Runtime behavior
@@ -87,24 +87,11 @@ uv run --locked vod-recovery
 ## Development
 
 ```bash
-make install-deps
-uv run --locked prek install
+bunx lefthook install
 make check
-make check-fix
 ```
 
-Focused checks:
+Run `make check-fix` to apply automatic fixes and then run the checks.
 
-```bash
-make lint
-make lint-fix
-make check-hooks
-make check-types
-make check-deps
-make check-vulns
-make check-unused
-make check-security
-make check-build
-make test
-make check-workflows
-```
+Run `make test` for the test suite or `make check-build` to verify packaging in a temporary
+directory.

@@ -13,11 +13,5 @@ Thumbs.db
 __pycache__/
 
 .coverage
-.coverage.*
-coverage.xml
-htmlcov/
-
-build/
 dist/
-*.egg-info/
 *.py[cod]

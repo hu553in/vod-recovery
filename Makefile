@@ -3,7 +3,6 @@
 SHELL := /bin/bash -euo pipefail
 
 ACTIONLINT := bunx --minimum-release-age 259200 github-actionlint
-TAPLO := bunx --minimum-release-age 259200 @taplo/cli
 
 .PHONY: install-deps
 install-deps:
@@ -12,20 +11,18 @@ install-deps:
 .PHONY: lint
 lint:
 	bun fmt --check
-	$(TAPLO) fmt --check
 	uv run --locked ruff check
 	uv run --locked ruff format --check
 
 .PHONY: lint-fix
 lint-fix:
 	bun fmt
-	$(TAPLO) fmt
 	uv run --locked ruff check --fix
 	uv run --locked ruff format
 
 .PHONY: check-hooks
 check-hooks:
-	uv run --locked prek validate-config prek.toml
+	bunx --minimum-release-age 259200 lefthook validate
 
 .PHONY: check-types
 check-types:

@@ -40,7 +40,6 @@ packages = ["src/vod_recovery"]
 dev = [
   "bandit>=1.9.4",
   "deptry>=0.25.1",
-  "prek>=0.5.11",
   "pysentry-rs>=0.5.0",
   "pytest>=9.2.0",
   "pytest-cov>=7.1.0",
